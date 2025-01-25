@@ -10,6 +10,9 @@ import (
 	"github.com/bogdanfinn/tls-client/profiles"
 )
 
+// NewClient creates and returns a new HTTP client with specific configurations.
+// It sets a timeout, client profile, and cookie jar. It also checks for proxy settings
+// in environment variables or configuration files and applies them if found.
 func NewClient() (tls_client.HttpClient, error) {
 	options := []tls_client.HttpClientOption{
 		tls_client.WithTimeoutSeconds(120),

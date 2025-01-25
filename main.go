@@ -37,20 +37,8 @@ var executablePath = ""
 var logFile *string
 var shouldExecuteCommand *bool
 
-func main() {
-    execPath, err := os.Executable()
-    if err == nil {
-        executablePath = execPath
-    }
-    terminate := make(chan os.Signal, 1)
-    signal.Notify(terminate, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
-    go func() {
-        <-terminate
-        os.Exit(0)
-    }()
-
-    args := os.Args
-
+// parseFlags parses the command-line flags and returns the parsed values.
+func parseFlags() (bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, bool, string, *bool) {
     logFile = flag.String("log", "", "Filepath to log conversation to.")
     shouldExecuteCommand = flag.Bool(("y"), false, "Instantly execute the shell command")
 
@@ -90,6 +78,25 @@ func main() {
     flag.Parse()
 
     prompt := flag.Arg(0)
+
+    return *isQuiet, *isWhole, *isCode, *isShell, *isImage, *isInteractive, *isMultiline, *isVersion, *isHelp, *isUpdate, *isChangelog, prompt, *logFile, shouldExecuteCommand
+}
+
+func main() {
+    execPath, err := os.Executable()
+    if err == nil {
+        executablePath = execPath
+    }
+    terminate := make(chan os.Signal, 1)
+    signal.Notify(terminate, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+    go func() {
+        <-terminate
+        os.Exit(0)
+    }()
+
+    args := os.Args
+
+    isQuiet, isWhole, isCode, isShell, isImage, isInteractive, isMultiline, isVersion, isHelp, isUpdate, isChangelog, prompt, logFile, shouldExecuteCommand := parseFlags()
 
     pipedInput := ""
     cleanPipedInput := ""

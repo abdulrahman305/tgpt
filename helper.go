@@ -750,6 +750,7 @@ func addToShellHistory(command string) {
 	}
 }
 
+// makeRequestAndGetData sends a request to the specified provider and processes the response
 func makeRequestAndGetData(input string, params structs.Params, extraOptions structs.ExtraOptions) string {
 	resp, err := providers.NewRequest(input, params, extraOptions)
 

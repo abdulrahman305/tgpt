@@ -21,6 +21,7 @@ var availableProviders = []string{
 	"", "blackboxai", "duckduckgo", "isou", "groq", "koboldai", "ollama", "openai", "phind", "pollinations",
 }
 
+// GetMainText extracts the main text content from the response line based on the provider.
 func GetMainText(line string, provider string, input string) string {
 	switch provider {
 	case "blackboxai":
@@ -44,6 +45,8 @@ func GetMainText(line string, provider string, input string) string {
 	}
 }
 
+// NewRequest creates a new request to the specified provider with the given parameters and extra options.
+// It validates the provider and then delegates the request creation to the appropriate provider-specific function.
 func NewRequest(input string, params structs.Params, extraOptions structs.ExtraOptions) (*http.Response, error) {
 	validProvider := false
 	for _, str := range availableProviders {

@@ -115,35 +115,27 @@ jobs:
                   name: tgpt
                   body_path: ${{ github.workspace }}-CHANGELOG.txt
 
-            # - name: Install Snapcraft
-            #   run: |
-            #     sudo apt update
-            #     sudo apt install snapd jq
-            #     sudo snap install core
-            #     sudo snap install snapcraft --classic
+            - name: Run Unit Tests
+              run: |
+                  go test ./... -v
 
-            # - name: Build Snap package
-            #   run: |
-            #     snapcraft init
-            #     echo "name: Terminal GPT" >> snap/snapcraft.yaml
-            #     echo "version: $(jq ".version" < version.txt')" >> snap/snapcraft.yaml
-            #     echo "summary: CLI tool for ChatGPT 3.5" >> snap/snapcraft.yaml
-            #     echo "description: |" >> snap/snapcraft.yaml
-            #     echo "  gpt is a cross-platform command-line interface (CLI) tool that allows you to" >> snap/snapcraft.yaml
-            #     echo "  use ChatGPT 3.5 in your Terminal without requiring API keys." >> snap/snapcraft.yaml
-            #     echo "confinement: strict" >> snap/snapcraft.yaml
-            #     echo "parts:" >> snap/snapcraft.yaml
-            #     echo "  tgpt:" >> snap/snapcraft.yaml
-            #     echo "    plugin: go" >> snap/snapcraft.yaml
-            #     echo "    source: https://raw.githubusercontent.com/aandrew-me/tgpt/main/install" >> snap/snapcraft.yaml
-            #     echo "apps:" >> snap/snapcraft.yaml
-            #     echo "  tgpt:" >> snap/snapcraft.yaml
-            #     echo "    command: tgpt" >> snap/snapcraft.yaml
-            #     echo "    plugs: [home, network, network-bind]" >> snap/snapcraft.yaml
-            #     snapcraft
+            - name: Code Coverage
+              run: |
+                  go test -coverprofile=coverage.out ./...
+                  go tool cover -html=coverage.out -o coverage.html
+              continue-on-error: true
 
-            # - name: Publish to Snap Store
-            #   env:  
-            #     SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_TOKEN }}
-            #   run: |
-            #     snapcraft push --release=edge *.snap
+            - name: Upload Coverage Report
+              uses: actions/upload-artifact@v2
+              with:
+                  name: coverage-report
+                  path: coverage.html
+
+            - name: Deploy to Staging
+              if: github.ref == 'refs/heads/release'
+              run: |
+                  echo "Deploying to staging environment..."
+                  # Add your deployment script or commands here
+                  # For example, you can use scp to copy files to a remote server
+                  # scp tgpt-linux-amd64 user@staging-server:/path/to/deploy
+                  # ssh user@staging-server 'systemctl restart tgpt-service'

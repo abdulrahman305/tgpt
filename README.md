@@ -86,6 +86,80 @@ tgpt --provider openai --key "sk-xxxx" --model "gpt-3.5-turbo" "What is 1+1"
 cat install.sh | tgpt "Explain the code"
 ```
 
+### New Flag Parsing Function
+
+The new flag parsing function `parseFlags` is used to parse the command-line flags and returns the parsed values. This function improves the readability and maintainability of the code by separating the flag parsing logic from the main function.
+
+#### Usage
+
+To use the new flag parsing function, simply call it in the main function and use the returned values as needed.
+
+```go
+func main() {
+    isQuiet, isWhole, isCode, isShell, isImage, isInteractive, isMultiline, isVersion, isHelp, isUpdate, isChangelog, prompt, logFile, shouldExecuteCommand := parseFlags()
+
+    // Use the parsed flag values as needed
+    if isVersion {
+        fmt.Println("tgpt", localVersion)
+    }
+    // ...
+}
+```
+
+### Examples and Use Cases
+
+Here are some examples and use cases to help you understand how to use the application effectively:
+
+1. **Basic Usage**: To get a response from the AI chatbot, simply provide a prompt as an argument.
+    ```bash
+    tgpt "What is the capital of France?"
+    ```
+
+2. **Interactive Mode**: Start the interactive mode to have a continuous conversation with the AI chatbot.
+    ```bash
+    tgpt -i
+    ```
+
+3. **Multi-line Interactive Mode**: Start the multi-line interactive mode to input longer prompts.
+    ```bash
+    tgpt -m
+    ```
+
+4. **Generate and Execute Shell Commands**: Use the `-s` flag to generate and execute shell commands.
+    ```bash
+    tgpt -s "How to list all files in a directory?"
+    ```
+
+5. **Generate Code**: Use the `-c` flag to generate code snippets.
+    ```bash
+    tgpt -c "Hello world in Python"
+    ```
+
+6. **Generate Images**: Use the `-img` flag to generate images from text.
+    ```bash
+    tgpt -img "A beautiful sunset over the mountains"
+    ```
+
+7. **Quiet Mode**: Use the `-q` flag to get a response without the loading animation.
+    ```bash
+    tgpt -q "What is the meaning of life?"
+    ```
+
+8. **Whole Text Mode**: Use the `-w` flag to get the response as a whole text.
+    ```bash
+    tgpt -w "Explain the theory of relativity"
+    ```
+
+9. **Set Provider**: Use the `--provider` flag to specify a different provider.
+    ```bash
+    tgpt --provider openai --key "sk-xxxx" --model "gpt-3.5-turbo" "What is 1+1"
+    ```
+
+10. **Log Conversation**: Use the `--log` flag to log the conversation to a file.
+    ```bash
+    tgpt --log "conversation.log" "What is the weather today?"
+    ```
+
 ![demo](https://user-images.githubusercontent.com/66430340/233759296-c4cf8cf2-0cab-48aa-9e84-40765b823282.gif)
 
 ## Installation ⏬
